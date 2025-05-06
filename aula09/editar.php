@@ -1,0 +1,110 @@
+<?php  require_once 'conexao.php';?>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula 09 - Parte 02 - Editar Cliente</title>
+</head>
+<body>
+
+    <h1>Aula 09 - Parte 02 - Editar Cliente</h1>
+
+    <p>
+        <a href="index.php">Home</a> | 
+        <a href="clientes.php">Clientes</a>
+    </p>
+
+    <?php 
+    
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+            $id     = $_POST['id'];
+            $nome   = $_POST['nome'];
+            $fone   = $_POST['fone'];
+            $email  = $_POST['email'];
+
+            require_once 'validacoes.php';
+            if (ha_campos_em_branco($_POST)){
+                exit("<h3>Ao editar cliente, os campos não podem estar em branco</h3>");
+            }
+
+            $conn = conectar_banco();
+
+            $sql = "UPDATE tb_clientes set nome = ?, fone = ?, email = ? 
+                    WHERE id = ?";
+
+            $stmt = mysqli_prepare($conn, $sql);
+
+            mysqli_stmt_bind_param($stmt, "sssi", $nome, $fone, $email, $id);
+
+            if(mysqli_stmt_execute($stmt)) {
+                echo "<h3>Cliente ediatado com sucesso!</h3>";
+            } else {
+                echo "<h3>Erro ao editar cliente!</h3>";
+            }
+
+            mysqli_stmt_close($stmt);
+
+            mysqli_close($conn);
+
+        } else {
+
+            // se chegamos na página via get:
+            // verificar se recebemos um id
+            if (!isset($_GET['id'])) {
+                exit("<h3>ID não informado</h3>");
+            }
+
+            $id = (int) $_GET['id']; // armazenamos o id em uma variável local
+
+
+            $conn = conectar_banco(); // conexão com o bd
+
+            $query = "SELECT * FROM tb_clientes WHERE id = $id";
+
+            $resultado = mysqli_query($conn, $query);
+
+            // se, ao tentar fazer um select, não for encontrado um cliente com o id fornecido
+            if (!mysqli_num_rows($resultado) > 0) {
+                // mensagem de erro e encerramos o script
+                exit("<h3>Cliente não localizado</h3>");
+            }
+
+            // se não foi disparado a mensagem de erro, prosseguimos:
+            // variavel local 'cliente' se tornará um array associativo contendo os dados
+            // do cliente retornado pelo nosso SELECT e armazenado na variável 'resultado'
+            $cliente = mysqli_fetch_assoc($resultado)
+            ?>
+
+                <h2>Editando dados do Cliente</h2>
+                <form action="editar.php" method="post">
+
+                    <label for="nome">Nome: </label><br>
+                    <input type="text" name="nome" id="nome" 
+                    value="<?php echo $cliente['nome'];?>"><br><br>
+
+                    <label for="fone">Fone: </label><br>
+                    <input type="text" name="fone" id="fone" 
+                    value="<?= $cliente['fone']; ?>"><br><br>
+
+                    <label for="email">E-mail: </label><br>
+                    <input type="email" name="email" id="email" 
+                    value="<?= $cliente['email']; ?>"><br><br>
+
+                    <input type="hidden" name="id" 
+                    value="<?= $cliente['id']; ?>">
+
+                    <button type="submit">Editar</button>
+
+                </form>
+
+                <?php
+
+        }
+
+    
+    ?>
+    
+</body>
+</html>
