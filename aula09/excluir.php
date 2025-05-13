@@ -4,19 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aula 09 - Parte 2 - Excluir Cliente</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
 </head>
-<body>
+<body class="container-fluid">
 
     <h1>Aula 09 - Parte 02 - Excluir Cliente</h1>
 
-    <p>
-        <a href="index.php">Home</a> | 
-        <a href="clientes.php">Clientes</a>
-    </p>
-
     <?php 
+
+        require_once 'menu.php';
+
         if (!isset($_GET['id'])) {
-            exit("<h3>ID não informado</h3>");
+            exit('<h3 class="alert alert-danger">ID não informado</h3>');
         }
 
         require_once 'conexao.php'; // incluir arquivo de conexão com o BD
@@ -31,24 +30,24 @@
         $stmt = mysqli_prepare($conn, $sql);
 
         if (!$stmt) { // se houver algum erro na estrutura do sql
-            exit("<h3>Erro na preparação da consulta.</h3>");
+            exit('<h3 class="alert alert-danger">Erro na preparação da consulta.</h3>');
         }
 
         mysqli_stmt_bind_param($stmt, "i", $id);
 
         // se houver problema no statment, apresenta o erro abaixo e encerra script
         if (!mysqli_stmt_execute($stmt)){
-            exit("<h3>Erro ao excluir cliente: " . mysqli_stmt_error($stmt) . "</h3>");
+            exit('<h3 class="alert alert-danger">Erro ao excluir cliente: ' . mysqli_stmt_error($stmt) . "</h3>");
         }
         
         // se, ao executar o comando DELETE, nenhum registro for excluído com base no
         // id fornecido, apresenta o erro abaixo e encerra o script
         if(mysqli_affected_rows($conn) == 0) {
-            exit("<h3>Erro ao excluir cliente! Cliente inexistente</h3>");
+            exit('<h3 class="alert alert-danger">Erro ao excluir cliente! Cliente inexistente</h3>');
         }    
             
         // se passou por todas as validações, apresenta msg de sucesso
-        echo "<h3>Cliente excluído com sucesso!</h3>";
+        echo '<h3 class="alert alert-success">Cliente excluído com sucesso!</h3>';
                 
         mysqli_stmt_close($stmt); // encerrar o stmt
 
@@ -56,6 +55,6 @@
     
     
     ?>
-    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 </body>
 </html>
