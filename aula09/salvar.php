@@ -17,13 +17,9 @@
 
     <?php 
         // TODO: Inserir validações antes de incluir o arquivo de conexão
-        if (form_nao_enviado()) {
-            exit('<h3 class="alert alert-warning">Por favor, retorne à home e preencha o form.</h3>');
-        }
+        form_nao_enviado("Por favor, retorne à home e preencha o form");
 
-        if (ha_campos_em_branco($_POST)) {
-            exit('<h3 class="alert alert-warning">Por favor, preencha todos os campos do form</h3>');
-        }
+        ha_campos_em_branco("Por favor, preencha todos os campos do form");
 
         require_once 'conexao.php'; // inclui arquivo de conexão
 
@@ -40,20 +36,22 @@
 
         $stmt = mysqli_prepare($conn, $sql);
 
-        if (!$stmt) { // se houver algum erro na estrutura do sql
-            exit('<h3 class="alert alert-danger">Erro na preparação da consulta.</h3>');
-        }
+        verificar_erro_stmt($stmt); // verifica se há erros neste statement (declaração)
 
         // bind (associação) dos parametros
         // Basicamente, vamos substituir as '?' pelos valores das variáveis
-        mysqli_stmt_bind_param($stmt, "sss", $nome, $fone, $email);
+        $bind = mysqli_stmt_bind_param($stmt, "sss", $nome, $fone, $email);
+
+        verificar_bind_stmt($bind); // verifica se há erros no bind (associação) dos parâmetros
 
         // Executa o comando e verifica o retorno
-        if (mysqli_stmt_execute($stmt)) {
-            echo '<h3 class="alert alert-success">Cliente cadastrado com sucesso!</h3>';
-        } else {
-            echo '<h3 class="alert alert-danger">Erro ao salvar: ' . mysqli_stmt_error($stmt) . "</h3>";
-        }
+        $exe = mysqli_stmt_execute($stmt);
+
+        verificar_erro_execucao($exe, $stmt, "Erro ao cadastrar cliente"); // verifica se há erro na execução do stmt
+
+        // se chegamos até aqui sem interrupção, o comando foi executado com sucesso,
+        // então, mostramos uma msg de sucesso:
+        echo '<h3 class="alert alert-success">Cliente cadastrado com sucesso!</h3>';
 
         mysqli_close($conn); // encerra a conecão com o banco
     

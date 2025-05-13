@@ -14,9 +14,9 @@
 
         require_once 'menu.php';
 
-        if (!isset($_GET['id'])) {
-            exit('<h3 class="alert alert-danger">ID não informado</h3>');
-        }
+        require_once 'validacoes.php';
+
+        id_nao_informado("ID não informado"); // verifica se o id foi informado via get
 
         require_once 'conexao.php'; // incluir arquivo de conexão com o BD
 
@@ -29,22 +29,21 @@
 
         $stmt = mysqli_prepare($conn, $sql);
 
-        if (!$stmt) { // se houver algum erro na estrutura do sql
-            exit('<h3 class="alert alert-danger">Erro na preparação da consulta.</h3>');
-        }
+        verificar_erro_stmt($stmt); // verifica se há erros neste statement (declaração)
 
-        mysqli_stmt_bind_param($stmt, "i", $id);
+        $bind = mysqli_stmt_bind_param($stmt, "i", $id);
 
-        // se houver problema no statment, apresenta o erro abaixo e encerra script
-        if (!mysqli_stmt_execute($stmt)){
-            exit('<h3 class="alert alert-danger">Erro ao excluir cliente: ' . mysqli_stmt_error($stmt) . "</h3>");
-        }
+        verificar_bind_stmt($bind); // verifica se há erros no bind (associação) dos parâmetros
+
+        // Executa o comando e verifica o retorno
+        $exe = mysqli_stmt_execute($stmt);
+
+        verificar_erro_execucao($exe, $stmt, "Erro ao excluir cliente"); // verifica se há erro na execução do stmt
         
         // se, ao executar o comando DELETE, nenhum registro for excluído com base no
         // id fornecido, apresenta o erro abaixo e encerra o script
-        if(mysqli_affected_rows($conn) == 0) {
-            exit('<h3 class="alert alert-danger">Erro ao excluir cliente! Cliente inexistente</h3>');
-        }    
+
+        nao_ha_linhas_afetadas($conn, "Não foi possível excluir o cliente com o ID especificado");
             
         // se passou por todas as validações, apresenta msg de sucesso
         echo '<h3 class="alert alert-success">Cliente excluído com sucesso!</h3>';

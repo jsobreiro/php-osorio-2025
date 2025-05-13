@@ -22,9 +22,8 @@
             $email  = $_POST['email'];
 
             require_once 'validacoes.php';
-            if (ha_campos_em_branco($_POST)){
-                exit('<h3 class="alert alert-warning">Ao editar cliente, os campos não podem estar em branco</h3>');
-            }
+            
+            ha_campos_em_branco("Ao editar cliente, os campos não podem estar em branco");
 
             $conn = conectar_banco();
 
