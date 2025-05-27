@@ -13,29 +13,9 @@
     
     <?php 
     
-        if (isset($_GET['code'])) {
+       require_once 'funcoes.php';
 
-            $code = (int)$_GET['code'];
-
-            switch($code) {
-
-                case 0: 
-                    $erro = '<h3>Você não tem permissão para acessar a página de destino</h3>';
-                    break;
-                
-                case 1:
-                    $erro = '<h3>Usuário ou senha inválidos. Tente novamente</h3>';
-                    break;
-                
-                default:
-                    $erro = "";
-                    break;
-            }
-
-            echo $erro;
-
-        }
-    
+       tratar_erros();   
     
     ?>
 
