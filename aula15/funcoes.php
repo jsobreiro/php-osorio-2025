@@ -8,6 +8,10 @@ function form_em_branco() {
     return empty($_POST['usuario']) || empty($_POST['senha']);
 }
 
+function tarefa_em_branco() {
+    return empty($_POST['tarefa']);
+}
+
 function tratar_erros () {
 
     if (!isset($_GET['code'])) {
@@ -28,6 +32,11 @@ function tratar_erros () {
 
         case 2:
             $erro = '<h2>Por favor, preencha todos os campos do form</h2>';
+            break;
+
+        case 3:
+            $erro = '<h3>Erro ao executar consulta ao banco de dados. 
+                    Tente novamente mais tarde, ou contate o suporte</h3>';
             break;
         
         default:

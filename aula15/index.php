@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aula 13 - Login e Senha</title>
+    <title>Aula 15 - Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
 </head>
-<body>
+<body class="container">
     
-    <h1>Aula 13 - Sistema de Login</h1>
+    <h1>Aula 15 - Sistema de Tarefas - Home</h1>
 
     <h2>Informe os dados para login:</h2>
     
@@ -32,7 +33,7 @@
             <input type="password" name="senha" id="senha">
         </p>
 
-        <button type="submit">Login</button>
+        <button type="submit" class="btn btn-success">Login</button>
 
     </form>
 

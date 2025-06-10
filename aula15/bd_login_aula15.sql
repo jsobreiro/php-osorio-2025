@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3307
--- Tempo de geração: 27/05/2025 às 17:45
+-- Tempo de geração: 10/06/2025 às 16:29
 -- Versão do servidor: 10.4.21-MariaDB
 -- Versão do PHP: 8.0.12
 
@@ -26,6 +26,30 @@ USE `bd_login`;
 -- --------------------------------------------------------
 
 --
+-- Estrutura para tabela `tb_tarefas`
+--
+
+CREATE TABLE `tb_tarefas` (
+  `id_tarefa` int(11) NOT NULL,
+  `tarefa` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `usuario_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Despejando dados para a tabela `tb_tarefas`
+--
+
+INSERT INTO `tb_tarefas` (`id_tarefa`, `tarefa`, `usuario_id`) VALUES
+(1, 'Cadastrar novos usuários', 1),
+(2, 'Testar novas funcionalidades', 1),
+(3, 'Acabar a aula mais cedo', 1),
+(4, 'Fazer mercado', 4),
+(6, 'Passear com os cachorros', 4),
+(8, 'bla bla', 4);
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura para tabela `tb_usuarios`
 --
 
@@ -41,14 +65,21 @@ CREATE TABLE `tb_usuarios` (
 --
 
 INSERT INTO `tb_usuarios` (`id`, `usuario`, `senha`, `email`) VALUES
-(1, 'jasobreiro', 'lalala1234', 'jasobreiro@up.edu.br'),
+(1, 'admin', 'admin123', 'admin@universo.com'),
 (2, 'bobson', 'bob@son', 'bob@son.com'),
 (3, 'josepher', 'senha', 'josepher@bol.com.br'),
-(4, 'donicleydson', '1234mudar', 'doni@cleyson.net\r\n\r\n');
+(4, 'jason', '1234mudar', 'jason@gmail.com');
 
 --
 -- Índices para tabelas despejadas
 --
+
+--
+-- Índices de tabela `tb_tarefas`
+--
+ALTER TABLE `tb_tarefas`
+  ADD PRIMARY KEY (`id_tarefa`),
+  ADD KEY `usuario_tarefa` (`usuario_id`);
 
 --
 -- Índices de tabela `tb_usuarios`
@@ -61,10 +92,26 @@ ALTER TABLE `tb_usuarios`
 --
 
 --
+-- AUTO_INCREMENT de tabela `tb_tarefas`
+--
+ALTER TABLE `tb_tarefas`
+  MODIFY `id_tarefa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
 -- AUTO_INCREMENT de tabela `tb_usuarios`
 --
 ALTER TABLE `tb_usuarios`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- Restrições para tabelas despejadas
+--
+
+--
+-- Restrições para tabelas `tb_tarefas`
+--
+ALTER TABLE `tb_tarefas`
+  ADD CONSTRAINT `usuario_tarefa` FOREIGN KEY (`usuario_id`) REFERENCES `tb_usuarios` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
